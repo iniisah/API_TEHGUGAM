@@ -1,9 +1,9 @@
---find-links https://download.pytorch.org/whl/cpu
 torch==2.2.2+cpu
+https://download.pytorch.org/whl/cpu/torch-2.2.2%2Bcpu-cp310-cp310-linux_x86_64.whl
 ultralytics==8.1.37
 fastapi==0.111.0
 uvicorn==0.29.0
 pillow==10.3.0
-numpy==1.26.4  
+numpy==1.26.4
 pydantic==2.7.1
-setuptools==70.0.0  
+setuptools==70.0.0
