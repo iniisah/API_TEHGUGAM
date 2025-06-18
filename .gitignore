@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+venv/
+.env
+# jangan abaikan .pt dan train folder
