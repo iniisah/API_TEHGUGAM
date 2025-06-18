@@ -1,7 +1,27 @@
+# Python artifacts
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*.so
+
+# Virtual environments
 venv/
-.git/
+ENV/
+env/
+
+# IDE & tooling
 .idea/
+.vscode/
+*.swp
+
+# Git
+.git/
+.gitignore
+
+# Data or weights (optional, only if not needed in container)
+*.pt
+*.pth
+*.h5
+
+# OS files
+.DS_Store
+Thumbs.db
