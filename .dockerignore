@@ -12,6 +12,9 @@ __pycache__/
 .idea/
 *.vscode/
 
-# Dokumentasi & lain-lain
-*.txt
-*.yaml
+# Dokumentasi & konfigurasi lain yang tidak perlu
+README*.txt
+config.yaml
+
+# ✅ Pastikan requirements.txt tetap disertakan!
+!requirements.txt
