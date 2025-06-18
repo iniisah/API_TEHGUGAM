@@ -4,5 +4,6 @@ ultralytics==8.1.37
 fastapi==0.111.0
 uvicorn==0.29.0
 pillow==10.3.0
-numpy==1.24.4
+numpy==1.26.4  # Versi spesifik yang stabil
 pydantic==2.7.1
+setuptools==70.0.0  # Tambahkan ini untuk memastikan
