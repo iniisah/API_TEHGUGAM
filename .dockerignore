@@ -1,0 +1,17 @@
+# Jangan ikutkan file model ke build
+*.pt
+
+# Folder training dan data berat
+train*/
+test/
+valid/
+
+# Sampah sistem / cache
+__pycache__/
+*.log
+.idea/
+*.vscode/
+
+# Dokumentasi & lain-lain
+*.txt
+*.yaml

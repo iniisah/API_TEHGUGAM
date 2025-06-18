@@ -1,0 +1,14 @@
+train: C:/ppl code/yolo/AI/train/images
+val: C:/ppl code/yolo/AI/valid/images
+test: C:/ppl code/yolo/AI/test/images
+
+nc: 4
+names: ['Blister Blight', 'Brown Blight', 'Gray blight', 'Red rust']
+
+roboflow:
+  workspace: tea-plant
+  project: tea-disease-zfekj
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/tea-plant/tea-disease-zfekj/dataset/1
+

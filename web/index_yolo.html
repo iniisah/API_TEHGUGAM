@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prediksi Daun Teh</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      padding: 30px 15px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 24px;
+      color: #2f3542;
+      font-size: 32px;
+      animation: fadeInDown 1s ease-in-out;
+    }
+
+    .custom-file-upload {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #2ecc71;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .custom-file-upload:hover {
+      background-color: #27ae60;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .image-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+
+    img#imagePreview {
+      margin-top: 20px;
+      max-width: 90%;
+      width: 350px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      animation: zoomIn 0.6s ease;
+      display: none;
+    }
+
+    .spinner {
+      margin-top: 20px;
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+
+    button {
+      padding: 10px 24px;
+      background-color: #3498db;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    p#result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #2d3436;
+      white-space: pre-wrap;
+      animation: fadeInUp 0.7s ease;
+      display: none;
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Upload Gambar Daun Teh</h1>
+
+  <label class="custom-file-upload">
+    <input type="file" id="fileInput" accept="image/*" onchange="previewImage()" />
+    Pilih Gambar atau Buka Kamera
+  </label>
+
+  <div class="image-wrapper">
+    <img id="imagePreview" alt="Preview Gambar" />
+  </div>
+
+  <div class="spinner" id="loadingSpinner"></div>
+
+  <button onclick="sendImage()">Prediksi</button>
+
+  <p id="result"></p>
+
+  <script>
+    function previewImage() {
+      const input = document.getElementById('fileInput');
+      const image = document.getElementById('imagePreview');
+      const resultText = document.getElementById('result');
+      const file = input.files[0];
+
+      resultText.style.display = "none"; // hide previous result
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          image.src = e.target.result;
+          image.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        image.src = '';
+        image.style.display = 'none';
+      }
+    }
+
+    async function sendImage() {
+      const input = document.getElementById('fileInput');
+      const file = input.files[0];
+      const spinner = document.getElementById('loadingSpinner');
+      const resultText = document.getElementById('result');
+
+      if (!file) {
+        alert("Pilih file gambar terlebih dahulu.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        spinner.style.display = 'block';
+        resultText.style.display = 'none';
+        resultText.innerText = "";
+
+        const response = await fetch("http://localhost:8000/predict", {
+          method: "POST",
+          body: formData
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+        const result = await response.json();
+
+        let displayMessage = "";
+
+        if (result.status === "Healthy") {
+          displayMessage = `✅ Daun terdeteksi SEHAT.\n\n🌿 Kualitas: ${result.kualitas}`;
+        } else if (result.status === "Sick") {
+          displayMessage = `❗ Deteksi penyakit daun:\n\n🦠 ${result.penyakit}\n\n📖 ${result.deskripsi}`;
+        } else if (result.status === "Unknown") {
+          displayMessage = `⚠️ Gambar tidak dikenali sebagai daun teh.\n${result.message || ""}`;
+        } else {
+          displayMessage = "⚠️ Respons tidak dikenali.";
+        }
+
+        resultText.innerText = displayMessage;
+        resultText.style.display = "block";
+
+      } catch (err) {
+        console.error(err);
+        alert("Gagal mengirim gambar. Pastikan API FastAPI sedang berjalan.");
+      } finally {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        spinner.style.display = 'none';
+      }
+    }
+  </script>
+
+</body>
+</html>
