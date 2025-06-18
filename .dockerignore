@@ -1,8 +1,7 @@
-venv/
-*.pt
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.git/
 .idea/
-.vscode/
-train*/
-test/
-valid/
