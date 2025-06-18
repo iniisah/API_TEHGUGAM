@@ -1,20 +1,8 @@
-# Jangan ikutkan file model ke build
+venv/
 *.pt
-
-# Folder training dan data berat
+__pycache__/
+.idea/
+.vscode/
 train*/
 test/
 valid/
-
-# Sampah sistem / cache
-__pycache__/
-*.log
-.idea/
-*.vscode/
-
-# Dokumentasi & konfigurasi lain yang tidak perlu
-README*.txt
-config.yaml
-
-# ✅ Pastikan requirements.txt tetap disertakan!
-!requirements.txt
